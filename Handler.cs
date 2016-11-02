@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Swashbuckle.Swagger.Model;
 using Swashbuckle.SwaggerGen.Generator;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
+using Microsoft.AspNetCore.Cors;
 
 public class Handler {
 
@@ -56,6 +57,7 @@ public class Handler {
         //     .AddDefaultTokenProviders();
 
         services.AddMvc();
+        services.AddCors();
 
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
@@ -98,10 +100,9 @@ public class Handler {
             app.UseDeveloperExceptionPage();
             app.UseDatabaseErrorPage();
             app.UseStatusCodePages();
-            Seed.InitializeDev(db);
-        } else {
-            Seed.InitializeProd(db);
         }
+
+        Seed.Initialize(db, env.IsDevelopment());
 
         // app.UseApplicationInsightsRequestTelemetry();
         // app.UseApplicationInsightsExceptionTelemetry();

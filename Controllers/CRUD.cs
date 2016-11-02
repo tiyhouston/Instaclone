@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using System.Linq;
+using System;
 
 /*
 
@@ -17,13 +19,19 @@ DELETE /api/todo/{id}	Delete an item.	        None	                None
 */
 public abstract class CRUDController<T> : Controller where T: class, HasId
 {
-    private IRepository<T> r;
+    protected IRepository<T> r;
     public CRUDController(IRepository<T> r){
         this.r = r;
     }
 
     [HttpPost]
-    public IActionResult C([FromBody] T item) => Ok(r.Create(item));
+    public IActionResult C([FromBody] T item) {
+        Console.WriteLine(ModelState);
+        if(!ModelState.IsValid) 
+            return BadRequest(ModelState.ToErrorObject());
+            
+        return Ok(r.Create(item));
+    }
 
     [HttpGet("{id?}")]
     public IActionResult R(int id = -1) {
@@ -39,7 +47,7 @@ public abstract class CRUDController<T> : Controller where T: class, HasId
 
     [HttpPut("{id}")]
     public IActionResult U(int id, [FromBody] T item){
-        if(item.Id != id || !r.Update(item))
+        if(item.Id != id || !ModelState.IsValid || !r.Update(item))
             return BadRequest();
 
         return Ok(); 

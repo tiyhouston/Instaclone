@@ -11,12 +11,14 @@ public interface HasId {
     int Id { get; set; }
 }
 
-public interface IRepository<T> { 
+public interface IRepository<T> where T: class, HasId { 
     T Create(T item);
     IEnumerable<T> Read();
+    IEnumerable<T> Read(Func<DbSet<T>, IEnumerable<T>> fn);
     T Read(int id);
     bool Update(T item);
     T Delete(int id);
+    IEnumerable<T> FromSql(string sql);
 }
 
 public class Repo<T> : IRepository<T> where T : class, HasId {
@@ -51,9 +53,13 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
         db.SaveChanges();
         return item;
     }
-    
+
     public IEnumerable<T> Read(){
         return table.ToList();
+    }
+    
+    public IEnumerable<T> Read(Func<DbSet<T>, IEnumerable<T>> fn){
+        return fn(table).ToList();
     }
     
     public T Read(int id){
@@ -81,5 +87,8 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
         }
         return null;
     }
+
+    // SQL
+    public IEnumerable<T> FromSql(string sql) => table.FromSql(sql);
 
 }
