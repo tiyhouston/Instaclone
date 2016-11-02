@@ -63,8 +63,10 @@ public class Handler {
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
         // do
         Repo<Card>.Register(services, "Cards");
-        Repo<CardList>.Register(services, "CardLists");
-        Repo<Board>.Register(services, "Boards");
+        Repo<CardList>.Register(services, "CardLists", 
+            d => d.Include(l => l.Cards));
+        Repo<Board>.Register(services, "Boards", 
+            d => d.Include(b => b.Lists).ThenInclude(l => l.Cards));
 
         // Inject an implementation of ISwaggerProvider with defaulted settings applied
         services.AddSwaggerGen();
@@ -74,8 +76,8 @@ public class Handler {
             options.SingleApiVersion(new Info
             {
                 Version = "v1",
-                Title = "Simple DB Example",
-                Description = "A sample boilerplate for .NET Core"
+                Title = "API Docs",
+                Description = "Test and demo the API"
             });
             options.IgnoreObsoleteActions();
             options.IgnoreObsoleteProperties();
@@ -86,6 +88,8 @@ public class Handler {
     public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger, DB db) {
         // logger.AddConsole(Configuration.GetSection("Logging"));
         logger.AddDebug();
+
+        app.UseCors("AllowAllOrigins");
 
         // Example custom middleware
         // app.Use(async (context, next) =>

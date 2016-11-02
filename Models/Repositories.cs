@@ -23,17 +23,14 @@ public interface IRepository<T> where T: class, HasId {
 
 public class Repo<T> : IRepository<T> where T : class, HasId {
 
-    private DB db;
-    private DbSet<T> table;
+    protected DB db;
+    protected IEnumerable<T> table;
+    protected DbSet<T> dbtable;
 
-    public Repo(DB db){
+    public Repo(DB db, string tableName, Func<DbSet<T>,IEnumerable<T>> includer){
         this.db = db;
-    }
-
-    // services.AddSingleton<IRepository<T>, Repo<T>>()
-    public Repo(DB db, string tableName){
-        this.db = db;
-        table = GetTable(tableName);
+        dbtable = GetTable(tableName);
+        table = includer(dbtable);
     }
 
     // utilities for setup
@@ -41,17 +38,20 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
         return (DbSet<T>)db.GetType().GetProperty(tableName).GetValue(db);
     }
     public static void Register(IServiceCollection services, string n) {
+        Register(services, n, dbset => dbset);
+    }
+    public static void Register(IServiceCollection services, string n, Func<DbSet<T>,IEnumerable<T>> includer) {
         services.AddScoped<IRepository<T>>(provider => {
             var db = provider.GetRequiredService<DB>();
-            return new Repo<T>(db, n);
+            return new Repo<T>(db, n, includer);
         });
     }
     
     // CRUD stuff
     public T Create(T item){
-        table.Add(item);
+        dbtable.Add(item);
         db.SaveChanges();
-        return item;
+        return table.First(x => x.Id == item.Id);
     }
 
     public IEnumerable<T> Read(){
@@ -59,7 +59,7 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
     }
     
     public IEnumerable<T> Read(Func<DbSet<T>, IEnumerable<T>> fn){
-        return fn(table).ToList();
+        return fn(dbtable).ToList();
     }
     
     public T Read(int id){
@@ -69,9 +69,9 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
     public bool Update(T item){
         T actual = table.First(x => x.Id == item.Id);
         if(actual != null) {
-            table.Remove(actual);
+            dbtable.Remove(actual);
             item.Id = actual.Id;
-            table.Add(item);
+            dbtable.Add(item);
             db.SaveChanges();
             return true;
         }
@@ -81,7 +81,7 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
     public T Delete(int id){
         T actual = table.First(x => x.Id == id);
         if(actual != null) {
-            table.Remove(actual);
+            dbtable.Remove(actual);
             db.SaveChanges();
             return actual;
         }
@@ -89,6 +89,6 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
     }
 
     // SQL
-    public IEnumerable<T> FromSql(string sql) => table.FromSql(sql);
+    public IEnumerable<T> FromSql(string sql) => dbtable.FromSql(sql);
 
 }

@@ -26,7 +26,6 @@ public abstract class CRUDController<T> : Controller where T: class, HasId
 
     [HttpPost]
     public IActionResult C([FromBody] T item) {
-        Console.WriteLine(ModelState);
         if(!ModelState.IsValid) 
             return BadRequest(ModelState.ToErrorObject());
             
