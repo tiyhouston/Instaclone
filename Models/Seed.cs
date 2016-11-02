@@ -16,7 +16,7 @@ public static class Seed
         }
 
         db.Database.EnsureCreated(); // create the tables!!
-        db.Database.Migrate(); // ensure migrations are registered
+        // db.Database.Migrate(); // ensure migrations are registered (sqlite/postgres only, won't work with in-memory db)
         
         if(db.Cards.Any() || db.CardLists.Any()) return;
 

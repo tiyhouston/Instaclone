@@ -38,10 +38,10 @@ public class Handler {
     public void ConfigureServices(IServiceCollection services)
     {
         // sqlite
-        services.AddDbContext<DB>(options => options.UseSqlite(Configuration.GetConnectionString("Sqlite")));
+        // services.AddDbContext<DB>(options => options.UseSqlite(Configuration.GetConnectionString("Sqlite")));
 
         // in-memory
-        // services.AddDbContext<DB>(options => options.UseInMemoryDatabase());
+        services.AddDbContext<DB>(options => options.UseInMemoryDatabase());
 
         // postgresql
         // Use a PostgreSQL database
