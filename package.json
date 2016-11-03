@@ -11,7 +11,7 @@
     "start": "npm-run-all --parallel css:watch js:watch net:watch",
     "www": "npm-run-all css js net",
     "setup": "dotnet restore && yarn",
-    "deploy": "now --docker && now-realias"
+    "deploy": "now --docker --force --debug && now-realias"
   },
   "author": "",
   "license": "ISC",
