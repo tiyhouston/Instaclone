@@ -13,8 +13,10 @@ using Swashbuckle.Swagger.Model;
 using Swashbuckle.SwaggerGen.Generator;
 using Microsoft.AspNetCore.Mvc.Formatters.Xml;
 using Microsoft.AspNetCore.Cors;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Session;
 
-public class Handler {
+public partial class Handler {
 
     public IConfigurationRoot Configuration { get; }
 
@@ -56,17 +58,17 @@ public class Handler {
         //     .AddEntityFrameworkStores<DB>()
         //     .AddDefaultTokenProviders();
 
+        services.AddDistributedMemoryCache();
+        services.AddSession(o => {
+            o.IdleTimeout = TimeSpan.FromSeconds(120);
+        });
         services.AddMvc();
         services.AddCors();
 
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
         // do
-        Repo<Card>.Register(services, "Cards");
-        Repo<CardList>.Register(services, "CardLists", 
-            d => d.Include(l => l.Cards));
-        Repo<Board>.Register(services, "Boards", 
-            d => d.Include(b => b.Lists).ThenInclude(l => l.Cards));
+        RegisterRepos(services);
 
         // Inject an implementation of ISwaggerProvider with defaulted settings applied
         services.AddSwaggerGen();
@@ -89,6 +91,7 @@ public class Handler {
         // logger.AddConsole(Configuration.GetSection("Logging"));
         logger.AddDebug();
 
+        app.UseSession();
         app.UseCors("AllowAllOrigins");
 
         // Example custom middleware
@@ -141,7 +144,7 @@ public class Handler {
 
         app.UseMvc(); //.AddXmlSerializerFormatters();
         // app.UseStatusCodePagesWithReExecute("/Home/Errors/{0}");
-        
+
         // Enable middleware to serve generated Swagger as a JSON endpoint
         app.UseSwagger();
 
