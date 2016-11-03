@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 
-public class Post : HasId {
+public class Gram : HasId {
     [Required]
     public int Id { get; set; }
     [Required]
@@ -18,9 +18,10 @@ public class Post : HasId {
     public List<Like> Likes { get; set; }
     [Required]
     public List<Comment> Comments { get; set; }
-    public string Message { get; set; } // don't forget to add limit on this!
+    [StringLength(250)]
+    public string Message { get; set; } 
     public string Title { get; set; }
-    public Post() {
+    public Gram() {
         Id = new Random().Next();
     }
 
@@ -31,6 +32,7 @@ public class Like : HasId {
     public int Id { get; set; }
     [Required]
     public DateTime createdAt { get; set; }
+    int GramId { get; set; }
     public Like() {
         Id = new Random().Next();
     }
@@ -39,18 +41,13 @@ public class Like : HasId {
 public class Comment : HasId {
     [Required]
     public int Id { get; set; }
-    [Required] // don't forget to include limit of characters here!
+    [Required] 
+    [StringLength(250)]
     public string Message { get; set; }
     [Required]
     public DateTime createdAt { get; set; }
+    int GramId { get; set; }
     public Comment() {
         Id = new Random().Next();
     }
-
-public partial class DB : DbContext {
-    public DbSet<Post> Posts { get; set; }
-    public DbSet<Like> Likes { get; set; }
-    public DbSet<Comment> Comments { get; set; }
-    }
-
 }

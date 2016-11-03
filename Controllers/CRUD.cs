@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+/* using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Linq;
 using System;
@@ -51,4 +51,4 @@ public abstract class CRUDController<T> : Controller where T: class, HasId {
         return Ok(item);
     
     }
-}
+} */

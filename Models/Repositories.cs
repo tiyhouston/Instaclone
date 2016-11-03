@@ -11,78 +11,48 @@ public interface HasId {
     int Id { get; set; }
 }
 
-public interface IRepository<T> where T : class, HasId {
-    T Create(T item);
-    IEnumerable<T> Read();
-    IEnumerable<T> Read(Func<DbSet<T>, IEnumerable<T>> fn);
-    T Read(int id);
-    bool Update(T item);
-    T Delete(int id);
+public interface IGramRepo {
+    void Add(Gram g);
+    IEnumerable<Gram> ReadAll();
+    Gram Read(int id);
+    bool Update(int id);
+    Gram Delete(int id);
 }
 
-public class Repo<T> : IRepository<T> where T : class, HasId {
+public class GramRepo : IGramRepo {
 
-    protected DB db;
-    protected IEnumerable<T> table;
-    protected DbSet<T> dbtable;
+    private List<GramRepo> grams = new List<GramRepo>();
 
-    public Repo(DB db, string tableName, Func<DbSet<T>,IEnumerable<T>> includer){
-        this.db = db;
-        dbtable = GetTable(tableName);
-        table = includer(dbtable);
+    public GramRepo g;
+
+    public void Add(Gram g) {
+        grams.Add(p);
     }
 
-    private DbSet<T> GetTable(string tableName){
-        return (DbSet<T>)db.GetType().GetProperty(tableName).GetValue(db);
+    public IEnumerable<Gram> ReadAll() {
+        return grams.ToList();
     }
 
-    public static void Register(IServiceCollection services, string n) {
-        Register(services, n, dbset => dbset);
+    public Gram Read(int id){
+        return grams.First(x => x.Id == id);
     }
 
-    public static void Register(IServiceCollection services, string n, Func<DbSet<T>,IEnumerable<T>> includer) {
-        services.AddScoped<IRepository<T>>(provider => {
-            var db = provider.GetRequiredService<DB>();
-            return new Repo<T>(db, n, includer);
-        });
-    }
-
-    public T Create(T item) {
-        dbtable.Add(item);
-        db.SaveChanges();
-        return table.First(x => x.Id == item.Id);
-    }
-
-    public IEnumerable<T> Read() {
-        return table.ToList();
-    }
-
-    public IEnumerable<T> Read(Func<DbSet<T>, IEnumerable<T>> fn) {
-        return fn(dbtable).ToList();
-    }
-
-    public T Read(int id){
-        return table.First(x => x.Id == id);
-    }
-
-    public bool Update(T item) {
-        T actual = table.First(x => x.Id == item.Id);
+    public bool Update(Gram g) {
+        Gram actual = grams.First(x => x.Id == g.Id);
         if(actual != null) {
-            dbtable.Remove(actual);
-            item.Id = actual.Id;
-            dbtable.Add(item);
-            db.SaveChanges();
+            grams.Remove(g);
+            g.Id = g.Id;
+            grams.Add(g);
             return true;
         }
         return false;
     }
 
-    public T Delete(int id) {
-        T actual = table.First(x => x.Id == id);
-        if(actual != null) {
-            dbtable.Remove(actual);
-            db.SaveChanges();
-            return actual;
+    public Gram Delete(int id) {
+        Gram p = grams.First(x => x.Id == id);
+        if(g != null) {
+            grams.Remove(g);
+            return g;
         }
         return null;
     }

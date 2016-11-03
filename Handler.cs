@@ -58,15 +58,14 @@ public class Handler {
 
         services.AddMvc();
         services.AddCors();
-
+        services.AddSingleton<IGramRepo, GramRepo>>();
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
         // do
-        Repo<Comment>.Register(services, "Comments");
-        Repo<Like>.Register(services, "Likes");
-        Repo<Post>.Register(services, "Posts", 
-            d => d.Include(l => l.Likes) && // ask Matt if this is correct.
-            d => d.Include(c => c.Comments)); //ask Matt about this!
+        
+  //      GramRepo<Gram>.Register(services, "Grams", 
+  //          d => d.Include(l => l.Likes) && // ask Matt if this is correct.
+  //          d => d.Include(c => c.Comments)); //ask Matt about this!
 
         // Inject an implementation of ISwaggerProvider with defaulted settings applied
         services.AddSwaggerGen();

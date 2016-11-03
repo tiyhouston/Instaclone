@@ -18,23 +18,30 @@ public static class Seed
         db.Database.EnsureCreated(); // create the tables!!
         // db.Database.Migrate(); // ensure migrations are registered (sqlite/postgres only, won't work with in-memory db)
         
-        if(db.Posts.Any() || db.Likes.Any() || db.Comments.Any()) return;
+        if(db.Likes.Any() || db.Comments.Any()) return;
 
-        Post p = new Post { ImageUrl = "http://bjstlh.com/data/wallpapers/165/WDF_2048218.png", Likes = new List<Like>(), Comments = new List<Comment>() };
-        Like l = new Like {}
-        Comment c = new Comment {}
-
-        Action createLikeList = () => {
-            Like likes = new Like { Summary="Todo items", Likes = new List<Like>() };
-
-            for(var i = 0; i < 10; i++)
-                todo.Cards.Add(new Card { Title = $"Test Card {i}", Content = $"Test Content {i}",  });
+        Post p = new Post { ImageURL = "", Id = 0, Likes = new List<Like>(), Comments = new List<Comment>() };
+        
+        Action createLike = () => {
+            Like l = new Like { Id = 0, };
             
-            b.Lists.Add(todo);
-        };
 
-        for(var j = 0; j<3; j++)
-            createList();
+         for(var i = 0; i < 10; i++)
+                l.Likes.Add(new Like { Id = 0, });
+                
+            
+            p.Post.Add(post);
+        
+        Action createComment = () => {
+            Comment c = new Comment { Id = 0, Message = "", };
+        
+        for(var i = 0; i < 10; i++)
+        c.Comments.Add(new Comment { Id = 0, Message = "Test Comment"});
+        }
+ //      };
+
+  //      for(var j = 0; j<3; j++)
+  //          createList();
         
         db.Posts.Add(p);
         db.Likes.Add(l);
