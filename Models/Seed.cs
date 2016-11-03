@@ -18,12 +18,14 @@ public static class Seed
         db.Database.EnsureCreated(); // create the tables!!
         // db.Database.Migrate(); // ensure migrations are registered (sqlite/postgres only, won't work with in-memory db)
         
-        if(db.Cards.Any() || db.CardLists.Any()) return;
+        if(db.Posts.Any() || db.Likes.Any() || db.Comments.Any()) return;
 
-        Board b = new Board { Title = "Test Board", Lists = new List<CardList>() };
+        Post p = new Post { ImageUrl = "http://bjstlh.com/data/wallpapers/165/WDF_2048218.png", Likes = new List<Like>(), Comments = new List<Comment>() };
+        Like l = new Like {}
+        Comment c = new Comment {}
 
-        Action createList = () => {
-            CardList todo = new CardList { Summary="Todo items", Cards = new List<Card>() };
+        Action createLikeList = () => {
+            Like likes = new Like { Summary="Todo items", Likes = new List<Like>() };
 
             for(var i = 0; i < 10; i++)
                 todo.Cards.Add(new Card { Title = $"Test Card {i}", Content = $"Test Content {i}",  });
@@ -34,7 +36,9 @@ public static class Seed
         for(var j = 0; j<3; j++)
             createList();
         
-        db.Boards.Add(b);
+        db.Posts.Add(p);
+        db.Likes.Add(l);
+        db.Comments.Add(c);
         db.SaveChanges(); 
         Console.WriteLine("----------CARDS SEEDED-------------");
     }

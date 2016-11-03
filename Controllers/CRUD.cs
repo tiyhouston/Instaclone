@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System;
 
-public CRUDController() {
+public abstract class CRUDController<T> : Controller where T: class, HasId {
 
     protected IRepository<T> r; //double check this 
     public CRUDController(IRepository<T> r){ // double check this
@@ -34,7 +34,7 @@ public CRUDController() {
 
     }
 
-    [HttpPut("{id})]
+    [HttpPut("{id}")]
     public IActionResult U(int id, [FromBody] T item) {
         if(item.Id !=id || !ModelState.IsValid || !r.Update(item))
             return BadRequest();
@@ -42,7 +42,7 @@ public CRUDController() {
         return Ok();
     }
 
-    [HttpDelete("{id})]
+    [HttpDelete("{id}")]
     public IActionResult D(int id){
         T item = r.Delete(id);
         if(item == null)

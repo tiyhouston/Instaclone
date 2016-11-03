@@ -62,11 +62,11 @@ public class Handler {
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
         // do
-        Repo<Card>.Register(services, "Cards");
-        Repo<CardList>.Register(services, "CardLists", 
-            d => d.Include(l => l.Cards));
-        Repo<Board>.Register(services, "Boards", 
-            d => d.Include(b => b.Lists).ThenInclude(l => l.Cards));
+        Repo<Comment>.Register(services, "Comments");
+        Repo<Like>.Register(services, "Likes");
+        Repo<Post>.Register(services, "Posts", 
+            d => d.Include(l => l.Likes) && // ask Matt if this is correct.
+            d => d.Include(c => c.Comments)); //ask Matt about this!
 
         // Inject an implementation of ISwaggerProvider with defaulted settings applied
         services.AddSwaggerGen();
