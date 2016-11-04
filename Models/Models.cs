@@ -17,6 +17,7 @@ public class Gram : HasId {
     [Required]
     public List<Like> Likes { get; set; }
     [Required]
+    [StringLengthAttribute(250)]
     public List<Comment> Comments { get; set; }
     [StringLength(250)]
     public string Message { get; set; } 

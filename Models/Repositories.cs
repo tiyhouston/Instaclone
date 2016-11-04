@@ -11,48 +11,65 @@ public interface HasId {
     int Id { get; set; }
 }
 
-public interface IGramRepo {
-    void Add(Gram g);
-    IEnumerable<Gram> ReadAll();
-    Gram Read(int id);
-    bool Update(int id);
-    Gram Delete(int id);
+public interface IRepository<T> where T : class, HasId {
+    void Add(T item);
+    IEnumerable<T> ReadAll();
+    T Read(int id);
+    bool Update(T item);
+    T Delete(int id);
 }
 
-public class GramRepo : IGramRepo {
-
-    private List<GramRepo> grams = new List<GramRepo>();
-
-    public GramRepo g;
-
-    public void Add(Gram g) {
-        grams.Add(p);
+public class GramRepo<T> : IRepository<T> where T : class, HasId {
+    private DB db;
+    private DbSet<T> table;
+   // private GramRepo<T> 
+    public GramRepo(DB db){
+        this.db = db;
+    }
+    public GramRepo(DB db, string tableName) {
+        this.db = db;
+        table = GetTable(tableName);
     }
 
-    public IEnumerable<Gram> ReadAll() {
-        return grams.ToList();
+    private DbSet<T> GetTable(string tableName){
+        return (DbSet<T>)db.GetType().GetProperty(tableName).GetValue(db);
     }
 
-    public Gram Read(int id){
-        return grams.First(x => x.Id == id);
+    public static void Register(IServiceCollection services, string n) {
+        services.AddScoped<IRepository<T>>(provider => {
+            var db = provider.GetRequiredService<DB>();
+            return new GramRepo<T>(db, n);
+        });
+    }
+    public void Add(T item) {
+        table.Add(item);
     }
 
-    public bool Update(Gram g) {
-        Gram actual = grams.First(x => x.Id == g.Id);
+    public IEnumerable<T> ReadAll() {
+        return table.ToList();
+    }
+
+    public T Read(int id){
+        return table.First(x => x.Id == id);
+    }
+
+    public bool Update(T item) {
+        T actual = table.First(x => x.Id == item.Id);
         if(actual != null) {
-            grams.Remove(g);
-            g.Id = g.Id;
-            grams.Add(g);
+            table.Remove(item);
+            item.Id = actual.Id;
+            table.Add(item);
             return true;
         }
         return false;
     }
 
-    public Gram Delete(int id) {
-        Gram p = grams.First(x => x.Id == id);
-        if(g != null) {
-            grams.Remove(g);
-            return g;
+    public T Delete(int id) {
+        T actual = table.First(x => x.Id == id);
+        if(actual != null) {
+            table.Remove(actual);
+            db.SaveChanges();
+            return actual;
         }
         return null;
     }

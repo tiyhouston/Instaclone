@@ -58,7 +58,7 @@ public class Handler {
 
         services.AddMvc();
         services.AddCors();
-        services.AddSingleton<IGramRepo, GramRepo>>();
+ //       services.AddSingleton<IRepository, Repo>>();
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
         // do
