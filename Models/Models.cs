@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 
 
-public class Like : HasId {
+public class Like {
     [Required]
     public int Id { get; set; }
     [Required]
@@ -21,7 +21,7 @@ public class Like : HasId {
     }
 }
 
-public class Comment : HasId {
+public class Comment {
     [Required]
     public int Id { get; set; }
     [Required] 

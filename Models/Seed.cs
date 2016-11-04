@@ -46,9 +46,7 @@ public static class Seed
             gram.Add(g7);
             gram.Add(g8);
             gram.Add(g9);
-
-
-            
+    }
             
         //  Action createLike = () => {
       //      Like l = new Like { Id = 0, };
@@ -69,7 +67,7 @@ public static class Seed
       //  db.Likes.Add(l);
       //  db.Comments.Add(c);
       //  db.SaveChanges(); 
-        Console.WriteLine("----------CARDS SEEDED-------------");
+      //  Console.WriteLine("----------CARDS SEEDED-------------");
     
     public partial class DB : DbContext {
         public DbSet<Gram> Grams { get; set; }
