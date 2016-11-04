@@ -55,15 +55,20 @@ public class Handler {
         // services.AddIdentity<User, IdentityRole>()
         //     .AddEntityFrameworkStores<DB>()
         //     .AddDefaultTokenProviders();
-
-        services.AddMvc();
-        services.AddCors();
- //       services.AddSingleton<IRepository, Repo>>();
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
         // do
-        
-  //      GramRepo<Gram>.Register(services, "Grams", 
+         services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials() );
+        });
+        services.AddMvc();
+
+  //      List<IGram>.Register(services, "Gram");
   //          d => d.Include(l => l.Likes) && // ask Matt if this is correct.
   //          d => d.Include(c => c.Comments)); //ask Matt about this!
 
@@ -105,7 +110,7 @@ public class Handler {
             app.UseStatusCodePages();
         }
 
-        Seed.Initialize(db, env.IsDevelopment());
+       // Seed.Initialize(db, env.IsDevelopment());
 
         // app.UseApplicationInsightsRequestTelemetry();
         // app.UseApplicationInsightsExceptionTelemetry();
