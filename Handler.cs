@@ -62,8 +62,15 @@ public partial class Handler {
         services.AddSession(o => {
             o.IdleTimeout = TimeSpan.FromSeconds(120);
         });
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder => builder.AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader()
+                .AllowCredentials() );
+        });
         services.AddMvc();
-        services.AddCors();
 
         // instead of
         //      services.AddScoped<IRepository<Card>, Repo<Card>>();
@@ -92,7 +99,7 @@ public partial class Handler {
         logger.AddDebug();
 
         app.UseSession();
-        app.UseCors("AllowAllOrigins");
+        app.UseCors("CorsPolicy");
 
         // Example custom middleware
         // app.Use(async (context, next) =>
