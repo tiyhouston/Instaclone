@@ -9,16 +9,13 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 
 public static class Seed
 {
-    public static void Initialize(IGram grams)
-    {
-        public static void Initialize(DB db, bool isDevEnvironment)
-    {
+    public static void Initialize(Gram grams, bool isDevEnvironment)  {
         if(isDevEnvironment){
             // db.Database.EnsureDeleted(); // delete then, ...
-        }
+        
 
-        db.Database.EnsureCreated(); // create the tables!!
-        db.Database.Migrate(); // ensure migrations are registered
+        grams.EnsureCreated(); // create the tables!!
+        grams.Migrate(); // ensure migrations are registered
         
       //  if(repo.Likes.Any() || repo.Comments.Any()) return; // if there were any likes or comments, you would return the gram that those likes/comments were associated with 
         Gram gram = new Gram { ImageURL = "", Id = 0, }; 
@@ -47,6 +44,7 @@ public static class Seed
             gram.Add(g8);
             gram.Add(g9);
     }
+}
             
         //  Action createLike = () => {
       //      Like l = new Like { Id = 0, };
@@ -70,8 +68,8 @@ public static class Seed
       //  Console.WriteLine("----------CARDS SEEDED-------------");
     
     public partial class DB : DbContext {
-        public DbSet<Gram> Grams { get; set; }
-        public DbSet<Comment> Comments { get; set; }
-        public DbSet<Like> Likes { get; set; }
+        public IEnumerable<Gram> Grams { get; set; }
+        public IEnumerable<Comment> Comments { get; set; }
+        public IEnumerable<Like> Likes { get; set; }
     }
 }

@@ -41,7 +41,7 @@ public class Handler {
         // services.AddDbContext<DB>(options => options.UseSqlite(Configuration.GetConnectionString("Sqlite")));
 
         // in-memory
-        services.AddDbContext<DB>(options => options.UseInMemoryDatabase());
+        // services.AddDbContext<DB>(options => options.UseInMemoryDatabase());
 
         // postgresql
         // Use a PostgreSQL database
@@ -52,7 +52,7 @@ public class Handler {
         //     )
         // );
 
-        // services.AddIdentity<User, IdentityRole>()
+         services.AddSingleton<IGram, Gram>();
         //     .AddEntityFrameworkStores<DB>()
         //     .AddDefaultTokenProviders();
         // instead of
@@ -89,7 +89,7 @@ public class Handler {
         });
     }
 
-    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger, DB db) {
+    public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory logger) {
         // logger.AddConsole(Configuration.GetSection("Logging"));
         logger.AddDebug();
 
