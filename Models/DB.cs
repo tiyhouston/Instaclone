@@ -1,4 +1,4 @@
-using Microsoft.EntityFrameworkCore;
+/*using Microsoft.EntityFrameworkCore;
 
 public partial class DB : DbContext {
 
@@ -11,4 +11,4 @@ public partial class DB : DbContext {
     public DbSet<Gram> Grams { get; set; }
     public DbSet<Like> Likes { get; set; }
     public DbSet<Comment> Comments { get; set; }
-}
+} */
