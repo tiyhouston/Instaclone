@@ -9,18 +9,11 @@ using Microsoft.Extensions.Configuration;
 public class Program
 {
     public static void Main(string[] args)
-    {
-        var config = 
-            new ConfigurationBuilder()
-                .AddCommandLine(args)
-                .AddEnvironmentVariables(prefix: "ASPNETCORE_")
-                .Build();
-        
+    {   
         var host = new WebHostBuilder()
             .UseKestrel()
             .UseWebRoot("assets")
             .UseContentRoot(Directory.GetCurrentDirectory())
-            .UseConfiguration(config)
             .UseIISIntegration()
             .UseStartup<Handler>()
             .Build();

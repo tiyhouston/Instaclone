@@ -11,12 +11,13 @@ public static class Seed
 {
     public static void Initialize(DB db, bool isDevEnvironment)
     {
-        if(isDevEnvironment){
-            db.Database.EnsureDeleted(); // delete then, ...
-        }
-
-        db.Database.EnsureCreated(); // create the tables!!
-        // db.Database.Migrate(); // ensure migrations are registered (sqlite/postgres only, won't work with in-memory db)
+        // use these for local Sqlite or in-memory db's
+        // db.Database.EnsureDeleted(); // delete then, ...
+        // db.Database.EnsureCreated(); // create the tables!!
+        
+        // use this for sql databases that persists (i.e. Heroku PostgreSQL)
+        // and comment out for in-memory DB
+        db.Database.Migrate();
         
         if(db.Cards.Any() || db.CardLists.Any()) return;
 
@@ -36,6 +37,6 @@ public static class Seed
         
         db.Boards.Add(b);
         db.SaveChanges(); 
-        Console.WriteLine("----------CARDS SEEDED-------------");
+        Console.WriteLine("----------DB SEEDED-------------");
     }
 }
