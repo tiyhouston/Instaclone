@@ -48,14 +48,14 @@ public partial class Handler {
         // services.AddDbContext<DB>(options => options.UseSqlite(Configuration.GetConnectionString("Sqlite")));
 
         // in-memory
-        // services.AddDbContext<DB>(options => options.UseInMemoryDatabase());
+        services.AddDbContext<DB>(options => options.UseInMemoryDatabase());
 
         // postgresql
         // Use a PostgreSQL database
-        string endpoint = Env.IsDevelopment() ? "dev" : "prod";
-        services.AddDbContext<DB>(options =>
-            options.UseNpgsql(
-                Configuration.GetConnectionString($"Postgres-{endpoint}")));
+        // string endpoint = Env.IsDevelopment() ? "dev" : "prod";
+        // services.AddDbContext<DB>(options =>
+        //     options.UseNpgsql(
+        //         Configuration.GetConnectionString($"Postgres-{endpoint}")));
 
         // using (var conn = new NpgsqlConnection(Configuration.GetConnectionString("Postgres-dev")))
         // {
