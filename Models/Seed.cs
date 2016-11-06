@@ -17,7 +17,7 @@ public static class Seed
         
         // use this for sql databases that persists (i.e. Heroku PostgreSQL)
         // and comment out for in-memory DB
-        db.Database.Migrate();
+        // db.Database.Migrate();
         
         if(db.Cards.Any() || db.CardLists.Any()) return;
 
