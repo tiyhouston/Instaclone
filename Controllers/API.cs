@@ -14,7 +14,7 @@ public class GramController : CRUDController<Gram> {
             || gram.Message.ToLower().IndexOf(term.ToLower()) != -1 // returning each gram where the term is in the title or the message - was creating error because there was no 'content' property in gram
         ))); 
     } 
-
+}
 
 [Route("/api/comment")]
 public class CommentController : CRUDController<Comment> {
@@ -25,4 +25,4 @@ public class CommentController : CRUDController<Comment> {
 public class LikeController : CRUDController<Like> {
     public LikeController(IRepository<Like> r) : base(r){}
     }
-}
+
