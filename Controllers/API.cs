@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 public class GramController : CRUDController<Gram> {
     public GramController(IRepository<Gram> r) : base(r){}
 
- //   [HttpGet("search")]
-/*    public IActionResult Search([FromQuery]string term, int listId = -1){
+   [HttpGet("search")]
+    public IActionResult Search([FromQuery]string term, int listId = -1){
         return Ok(r.Read(dbset => dbset.Where(gram => 
-            gram.Title.IndexOf(term) != -1
-            || gram.Content.IndexOf(term) != -1
+            gram.Title.ToLower().IndexOf(term.ToLower()) != -1
+            || gram.Message.ToLower().IndexOf(term.ToLower()) != -1 // returning each gram where the term is in the title or the message - was creating error because there was no 'content' property in gram
         ))); 
-    } */
+    } 
 }
 
 [Route("/api/comment")]
