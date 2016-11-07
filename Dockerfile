@@ -4,7 +4,7 @@ RUN apt-get -qq update && apt-get -qqy --no-install-recommends install git unzip
 RUN curl -sL https://deb.nodesource.com/setup_6.x |  bash -
 RUN apt-get install -y nodejs build-essential
 
-LABEL name "dotnetcore-boilerplate"
+LABEL name "instaclone"
 RUN mkdir -p /app
 COPY . /app
 WORKDIR /app
