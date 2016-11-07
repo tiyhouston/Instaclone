@@ -18,7 +18,7 @@ public interface IRepository<T> where T: class, HasId {
     T Read(int id);
     bool Update(T item);
     T Delete(int id);
-    IEnumerable<T> FromSql(string sql);
+ //   IEnumerable<T> FromSql(string sql);
 }
 
 public class Repo<T> : IRepository<T> where T : class, HasId {
@@ -89,6 +89,6 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
     }
 
     // SQL
-    public IEnumerable<T> FromSql(string sql) => dbtable.FromSql(sql);
+ //   public IEnumerable<T> FromSql(string sql) => dbtable.FromSql(sql);
 
 }
