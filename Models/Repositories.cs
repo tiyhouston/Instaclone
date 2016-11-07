@@ -18,6 +18,7 @@ public interface IRepository<T> where T: class, HasId {
     T Read(int id);
     bool Update(T item);
     T Delete(int id);
+    DbSet<T> dbtable {get;set;}
  //   IEnumerable<T> FromSql(string sql);
 }
 
@@ -25,7 +26,7 @@ public class Repo<T> : IRepository<T> where T : class, HasId {
 
     protected DB db;
     protected IEnumerable<T> table;
-    protected DbSet<T> dbtable;
+    public DbSet<T> dbtable {get; set;}
 
     public Repo(DB db, string tableName, Func<DbSet<T>,IEnumerable<T>> includer){
         this.db = db;
